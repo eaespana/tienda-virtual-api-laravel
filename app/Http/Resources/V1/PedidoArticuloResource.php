@@ -3,6 +3,7 @@
 namespace App\Http\Resources\V1;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Arr;
 
 class PedidoArticuloResource extends JsonResource
 {
@@ -14,23 +15,35 @@ class PedidoArticuloResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            'codigo_pedido' => $this->pedido->id,
-            'fecha_creacion_pedido' => $this->pedido->create_ad,
-            'fecha_entrega' => $this->pedido->fecha_entrega,
-            'ciudad_remision' => $this->pedido->ciudad_remision,
-            'direccion_remision' => $this->pedido->direccion_remision,
-            'datos_cliente' => [
-                'codigo_cliente' => $this->pedido->cliente->id,
-                'nombre_cliente' => $this->pedido->cliente->nombre_cliente,
-                'celular' => $this->pedido->cliente->celular
-            ],
-            'datos_articulos' => [
-                'codigo_articulo' => $this->articulo->id,
-                'cantidad_solicitada' => $this->articulo->cantidad_solicitada,
-                'nombre_articulo' => $this->articulo->nombre_articulo,
-                'descripcion_articulo' => $this->articulo->descripcion_articulo
-            ]
-        ];
+        $arreglo_pedido = null;
+        $datos_articulos = null;
+        foreach ($this->resource as $key => $value) {
+
+            if(empty($arreglo_pedido[$value->pedido->id])){
+                $arreglo_pedido[$value->pedido->id] = [
+                    'codigo_pedido' => $value->pedido->id,
+                    'fecha_creacion_pedido' => $value->pedido->create_ad,
+                    'fecha_entrega' => $value->pedido->fecha_entrega,
+                    'ciudad_remision' => $value->pedido->ciudad_remision,
+                    'direccion_remision' => $value->pedido->direccion_remision,
+                    'datos_cliente' => [
+                        'codigo_cliente' => $value->pedido->cliente->id,
+                        'nombre_cliente' => $value->pedido->cliente->nombre_cliente,
+                        'celular' => $value->pedido->cliente->celular
+                    ]
+                ];
+            }
+            $datos_articulos = [
+                'codigo_articulo' => $value->articulo->id,
+                'cantidad_solicitada' => $value->cantidad_solicitada,
+                'nombre_articulo' => $value->articulo->nombre_articulo,
+                'descripcion_articulo' => $value->articulo->descripcion_articulo
+            ];
+
+            $arreglo_pedido[$value->pedido->id]['datos_articulos'][$value->articulo->id] = $datos_articulos;
+
+            $datos_articulos = null;
+        }
+        return $arreglo_pedido;
     }
 }

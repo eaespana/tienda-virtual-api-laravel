@@ -7,6 +7,11 @@ use App\Models\Articulo;
 use Illuminate\Http\Request;
 use App\Http\Resources\V1\ArticuloResource;
 
+/**
+ * @OA\Info(title="API Articulos", version="1.0")
+ * @OA\Server(url="http://swagger.local")
+ *
+ */
 class ArticuloController extends Controller
 {
     /**
@@ -31,11 +36,19 @@ class ArticuloController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Articulo  $articulo
-     * @return \Illuminate\Http\Response
-     */
+    * @OA\Get(
+    *     path="api/v1/articulo/{id}",
+    *     summary="Mostrar articulos",
+    *     @OA\Response(
+    *         response=200,
+    *         description="Mostrar articulo por id."
+    *     ),
+    *     @OA\Response(
+    *         response="default",
+    *         description="Ha ocurrido un error."
+    *     )
+    * )
+    */
     public function show(Articulo $articulo)
     {
         return new ArticuloResource($articulo);

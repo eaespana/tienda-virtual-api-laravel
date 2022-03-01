@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\pedido_articulo;
+
 use Illuminate\Http\Request;
 use App\Http\Resources\V1\PedidoArticuloResource;
 
@@ -38,7 +39,6 @@ class PedidoArticuloController extends Controller
      */
     public function show(pedido_articulo $pedido_articulo)
     {
-        //dd($pedido_articulo);
         return new PedidoArticuloResource($pedido_articulo);
     }
 

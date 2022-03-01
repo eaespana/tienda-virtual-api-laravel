@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\V1\ArticuloController as ArticuloV1;
 use App\Http\Controllers\Api\V1\PedidoController as PedidoV1;
-use App\Http\Controllers\Api\V1\PedidoArticuloController as PedidoArticuloV1;
 use App\Http\Controllers\Api\LoginController as LoginV1;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -28,7 +27,7 @@ Route::apiResource('v1/articulo',ArticuloV1::class)
     ->middleware('auth:sanctum');
 
 Route::apiResource('v1/pedido',PedidoV1::class)
-    ->only(['show'])
+    ->only(['index','show','store'])
     ->middleware('auth:sanctum');
 
 Route::post('login', [LoginV1::class,'login']);
